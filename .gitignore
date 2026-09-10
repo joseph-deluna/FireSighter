@@ -1,3 +1,10 @@
 node_modules/
 .env
 .DS_Store
+backend/data/reports.json
+backend/data/*.tmp
+coverage/
+dist/
+.wrangler/
+.dev.vars*
+*.tgz

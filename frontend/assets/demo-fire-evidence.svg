@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+  <title id="title">FireSighter demo fire evidence</title>
+  <desc id="description">A clearly labeled illustrated placeholder used only by the optional demo data.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#182330"/>
+      <stop offset="1" stop-color="#334353"/>
+    </linearGradient>
+    <linearGradient id="flame" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#d7351f"/>
+      <stop offset="0.55" stop-color="#ff7a1a"/>
+      <stop offset="1" stop-color="#ffd166"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="675" fill="url(#sky)"/>
+  <circle cx="930" cy="130" r="90" fill="#f7b955" opacity=".16" filter="url(#soft)"/>
+  <path d="M0 475 165 370l135 72 170-155 150 132 142-90 185 117 113-84 140 98v215H0Z" fill="#101820"/>
+  <path d="M365 580c-18-83 55-115 44-196 70 47 80 94 62 135 45-28 71-75 56-132 83 64 125 128 96 193Z" fill="#ef4d2f" opacity=".35" filter="url(#soft)"/>
+  <path d="M392 585c-10-63 42-91 34-153 53 36 60 72 46 104 34-22 54-57 42-101 64 50 96 99 74 150Z" fill="url(#flame)"/>
+  <path d="M458 585c-5-35 24-51 19-85 30 20 34 40 26 58 19-12 30-32 23-57 36 28 54 56 42 84Z" fill="#ffe49b"/>
+  <g transform="translate(70 62)">
+    <rect width="430" height="104" rx="18" fill="#f7f3e8"/>
+    <path d="M42 75c-4-24 16-34 13-58 20 14 23 27 17 40 13-8 20-22 16-38 24 19 36 37 27 56Z" fill="#ef4d2f"/>
+    <text x="138" y="49" fill="#131c25" font-family="system-ui, sans-serif" font-size="30" font-weight="800" letter-spacing="3">FIRESIGHTER</text>
+    <text x="138" y="78" fill="#52606b" font-family="system-ui, sans-serif" font-size="18" font-weight="600">SAMPLE DATA</text>
+  </g>
+  <g transform="translate(710 480)">
+    <rect width="420" height="120" rx="16" fill="#fff7e8" stroke="#ef4d2f" stroke-width="6"/>
+    <text x="210" y="50" text-anchor="middle" fill="#b62f20" font-family="system-ui, sans-serif" font-size="31" font-weight="900" letter-spacing="2">DEMO EVIDENCE</text>
+    <text x="210" y="86" text-anchor="middle" fill="#273746" font-family="system-ui, sans-serif" font-size="20" font-weight="700">NOT A REAL FIRE REPORT</text>
+  </g>
+</svg>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="FireSighter is a camera-first community fire reporting and verified incident portal."
+    />
+    <meta name="theme-color" content="#ee7a24" />
+    <title>FireSighter | Community Fire Reporting</title>
+    <link rel="icon" href="/assets/firesighter-logo.webp" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <div class="app-shell">
+      <main id="main-content" tabindex="-1">
+        <div id="page-root" aria-live="polite">
+          <div class="page container loading-state">
+            <div class="spinner" aria-hidden="true"></div>
+            <p>Loading FireSighter…</p>
+          </div>
+        </div>
+      </main>
+
+      <footer class="site-footer public-footer">
+        <nav class="nav footer-nav container" aria-label="Footer navigation">
+          <a class="brand" href="#/report" aria-label="FireSighter reporting page">
+            <img src="/assets/firesighter-logo.webp" alt="" width="44" height="44" />
+            <span class="brand-copy">
+              <strong>FireSighter</strong>
+              <small>See it. Report it. Respond.</small>
+            </span>
+          </a>
+          <div class="nav-links" id="primary-links">
+            <a data-nav="report" href="#/report">Report a fire</a>
+            <a data-nav="incidents" href="#/incidents">Incidents</a>
+            <a data-nav="analytics" href="#/analytics">Analytics</a>
+            <a class="button button-secondary button-small admin-nav-link" data-nav="admin" href="#/admin/login">
+              Admin login
+            </a>
+          </div>
+        </nav>
+      </footer>
+    </div>
+
+    <div id="toast-region" class="toast-region" aria-live="assertive" aria-atomic="true"></div>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>

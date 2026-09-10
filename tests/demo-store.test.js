@@ -190,6 +190,13 @@ test('device-local demo rejects uploaded URLs and keeps project-page assets rela
   assert.ok(demoStorePosition > -1 && demoStorePosition < appPosition);
   assert.doesNotMatch(frontendHtml, /(?:src|href)="\//);
 
+  const appSource = fs.readFileSync(
+    path.join(PROJECT_ROOT, 'frontend', 'app.js'),
+    'utf8',
+  );
+  assert.equal((appSource.match(/class="form-step-heading"/g) || []).length, 3);
+  assert.doesNotMatch(appSource, /<fieldset class="form-step card"/);
+
   const rootHtml = fs.readFileSync(path.join(PROJECT_ROOT, 'index.html'), 'utf8');
   assert.match(rootHtml, /.\/frontend\/#\/report/);
 });

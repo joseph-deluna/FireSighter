@@ -305,8 +305,8 @@
 
             <div class="report-form-columns">
               <div class="report-form-column report-form-column-primary">
-            <fieldset class="form-step card">
-              <legend><span class="step-number">1</span><span><strong>Reporter details</strong><small>Who is sending this report?</small></span></legend>
+            <section class="form-step card" aria-labelledby="reporter-details-title">
+              <div class="form-step-heading"><span class="step-number">1</span><span><h3 id="reporter-details-title">Reporter details</h3><small>Who is sending this report?</small></span></div>
               <div class="form-grid two-columns">
                 <label class="field">
                   <span>First name <b aria-hidden="true">*</b></span>
@@ -317,15 +317,15 @@
                   <input id="last-name" name="lastName" type="text" autocomplete="family-name" maxlength="60" required placeholder="Dela Cruz" />
                 </label>
               </div>
-            </fieldset>
+            </section>
 
-            <fieldset class="form-step card">
-              <legend><span class="step-number">2</span><span><strong>Fire location</strong><small>Detect the location from this device.</small></span></legend>
+            <section class="form-step card" aria-labelledby="fire-location-title">
+              <div class="form-step-heading"><span class="step-number">2</span><span><h3 id="fire-location-title">Fire location</h3><small>Detect the location from this device.</small></span></div>
               <div id="detected-location-panel" class="detected-location-panel">
                 <div class="detected-location-header">
                   <div>
-                    <h3>Detect current location</h3>
-                    <p>Allow location access to automatically fill the address, city, and coordinates.</p>
+                    <h4>Detect current location</h4>
+                    <p>Allow location access to fill the address, city, and coordinates.</p>
                   </div>
                   <button id="use-location" class="button button-secondary" type="button">${icon('locate')} Use my location</button>
                 </div>
@@ -355,19 +355,19 @@
               <input id="longitude" name="lng" type="hidden" />
               <input id="resolved-address" name="address" type="hidden" />
               <input id="resolved-city" name="city" type="hidden" />
-            </fieldset>
+            </section>
 
               </div>
               <div class="report-form-column report-form-column-evidence">
 
-            <fieldset class="form-step card">
-              <legend><span class="step-number">3</span><span><strong>Live fire photo</strong><small>Capture what the camera sees right now.</small></span></legend>
-              <div class="camera-policy">${icon('shield')} For report integrity, gallery uploads are disabled. FireSighter only captures a live camera frame.</div>
+            <section class="form-step card" aria-labelledby="live-photo-title">
+              <div class="form-step-heading"><span class="step-number">3</span><span><h3 id="live-photo-title">Live fire photo</h3><small>Capture what the camera sees right now.</small></span></div>
+              <div class="camera-policy">${icon('shield')} Gallery uploads are disabled. Only a live camera frame can be used.</div>
               <div id="camera-stage" class="camera-stage">
                 <div id="camera-placeholder" class="camera-placeholder">
                   <span>${icon('camera')}</span>
                   <strong>Camera is off</strong>
-                  <p>Allow camera access, frame what the camera currently sees, then take the photo.</p>
+                  <p>Allow camera access, frame the fire, then take a photo.</p>
                 </div>
                 <video id="camera-preview" playsinline autoplay muted hidden></video>
                 <img id="captured-photo" alt="Your captured fire evidence" hidden />
@@ -389,7 +389,7 @@
                   <span class="input-with-icon">${icon('clock')}<input id="capture-time" type="text" readonly placeholder="Filled after taking a photo" /></span>
                 </label>
               </div>
-            </fieldset>
+            </section>
 
               </div>
             </div>
@@ -397,7 +397,7 @@
             <div class="report-consent card">
               <label class="checkbox-field">
                 <input id="accuracy-check" type="checkbox" required />
-                <span>I confirm this report is accurate to the best of my knowledge and the photo was captured just now.</span>
+                <span>I confirm this report is accurate and the photo was captured just now.</span>
               </label>
               <button id="submit-report" class="button button-primary button-large" type="submit">
                 ${icon('flame')} Submit fire report

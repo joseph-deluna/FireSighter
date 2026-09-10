@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "seed": "node scripts/seed-demo-data.js",
     "smoke:worker": "node scripts/smoke-worker.mjs",
-    "check": "node --check backend/server.js && node --check frontend/app.js",
+    "check": "node --check backend/server.js && node --check frontend/demo-store.js && node --check frontend/app.js",
     "types:worker": "WRANGLER_LOG_PATH=.wrangler/logs WRANGLER_WRITE_LOGS=false wrangler types --config wrangler.jsonc",
     "typecheck:worker": "tsc -p tsconfig.worker.json --noEmit",
     "test": "node --test --test-reporter=spec",

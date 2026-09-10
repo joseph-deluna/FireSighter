@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ee7a24" />
+    <meta name="description" content="Open the FireSighter browser demonstration." />
+    <title>FireSighter</title>
+    <link rel="icon" href="./frontend/assets/firesighter-logo.webp" />
+    <meta http-equiv="refresh" content="0; url=./frontend/#/report" />
+    <script>
+      (() => {
+        const target = new URL('./frontend/', window.location.href);
+        target.hash = window.location.hash || '#/report';
+        window.location.replace(target);
+      })();
+    </script>
+  </head>
+  <body>
+    <p><a href="./frontend/#/report">Open FireSighter</a></p>
+  </body>
+</html>

@@ -166,6 +166,10 @@
   }
 
   async function api(path, options = {}) {
+    if (window.FireSighterDemoDB?.request) {
+      return window.FireSighterDemoDB.request(path, options);
+    }
+
     const headers = { Accept: 'application/json', ...(options.headers || {}) };
     if (options.body && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
 
@@ -296,7 +300,7 @@
                 <h2>Tell us what you can see</h2>
                 <p>Fields marked <span aria-hidden="true">*</span><span class="sr-only">required</span> are required.</p>
               </div>
-              <span class="secure-note">${icon('shield')} Evidence protected</span>
+              <span class="secure-note">${icon('shield')} Saved on this device</span>
             </div>
 
             <div class="report-form-columns">
@@ -559,12 +563,20 @@
       message.className = 'field-message error-message';
       return;
     }
-    const maxWidth = 1440;
-    const scale = Math.min(1, maxWidth / video.videoWidth);
+    const maxWidth = 960;
+    const maxHeight = 720;
+    const scale = Math.min(1, maxWidth / video.videoWidth, maxHeight / video.videoHeight);
     canvas.width = Math.round(video.videoWidth * scale);
     canvas.height = Math.round(video.videoHeight * scale);
     canvas.getContext('2d', { alpha: false }).drawImage(video, 0, 0, canvas.width, canvas.height);
-    state.capturedPhoto = canvas.toDataURL('image/jpeg', 0.82);
+    const capturedPhoto = canvas.toDataURL('image/jpeg', 0.72);
+    const maximumLength = window.FireSighterDemoDB?.maxPhotoDataUrlLength || 1_600_000;
+    if (capturedPhoto.length > maximumLength) {
+      message.textContent = 'This camera frame is too large for device storage. Move closer to the fire area and try again.';
+      message.className = 'field-message error-message';
+      return;
+    }
+    state.capturedPhoto = capturedPhoto;
     state.capturedAt = new Date().toISOString();
     photo.src = state.capturedPhoto;
     photo.hidden = false;
@@ -604,7 +616,7 @@
 
     const button = document.querySelector('#submit-report');
     button.disabled = true;
-    button.innerHTML = '<span class="button-spinner" aria-hidden="true"></span> Sending report…';
+    button.innerHTML = '<span class="button-spinner" aria-hidden="true"></span> Saving report…';
     try {
       const payload = {
         firstName: document.querySelector('#first-name').value.trim(),
@@ -634,7 +646,7 @@
           <span class="success-mark">${icon('check')}</span>
           <p class="eyebrow">Report received</p>
           <h1>Thank you for helping your community.</h1>
-          <p>Your report is now in the admin review queue. It will only appear on the Incidents page after verification.</p>
+          <p>Your report is saved in this device's admin review queue. It will only appear on the Incidents page after verification.</p>
           <div class="reference-box">
             <span>Report reference</span>
             <strong>${escapeHtml(reportId(report?.id))}</strong>
@@ -661,7 +673,7 @@
       <section class="admin-shell">
         <aside class="admin-sidebar" aria-label="Admin navigation">
           <div class="admin-sidebar-brand">
-            <img src="/assets/firesighter-logo.webp" alt="" />
+            <img src="./assets/firesighter-logo.webp" alt="" />
             <span><strong>FireSighter</strong><small>Admin operations</small></span>
           </div>
           <nav class="admin-sidebar-nav">
@@ -705,7 +717,7 @@
       <section class="page admin-login-page">
         <div class="container admin-login-shell">
           <div class="admin-login-brand">
-            <img src="/assets/firesighter-logo.webp" alt="FireSighter" />
+            <img src="./assets/firesighter-logo.webp" alt="FireSighter" />
             <p class="eyebrow">Operations portal</p>
             <h1>Turn eyewitness reports into verified intelligence.</h1>
             <p>Authorized administrators can assess evidence, classify incidents, and keep the public record accurate.</p>
@@ -723,7 +735,7 @@
               <label class="field"><span>Username</span><span class="input-with-icon">${icon('user')}<input id="admin-username" name="username" autocomplete="username" required autofocus /></span></label>
               <label class="field"><span>Password</span><span class="input-with-icon">${icon('lock')}<input id="admin-password" name="password" type="password" autocomplete="current-password" required /></span></label>
               <p id="login-message" class="field-message" role="alert"></p>
-              <button id="login-button" class="button button-primary button-large" type="submit">Sign in securely ${icon('arrow')}</button>
+              <button id="login-button" class="button button-primary button-large" type="submit">Sign in to demo ${icon('arrow')}</button>
             </form>
             <p class="demo-credentials demo-credentials-subtle" aria-label="Demo login credentials">Demo access: <code>admin</code> / <code>admin123</code></p>
             <a class="back-link" href="#/report">← Return to public reporting</a>
@@ -755,7 +767,7 @@
       message.textContent = error.status === 401 ? 'The username or password is incorrect.' : error.message;
       message.className = 'field-message error-message';
       button.disabled = false;
-      button.textContent = 'Sign in securely';
+      button.textContent = 'Sign in to demo';
     }
   }
 
@@ -1112,7 +1124,7 @@
           <div class="container document-toolbar"><a class="button button-secondary" href="${adminMode ? '#/admin/incidents' : '#/incidents'}">← Back to incidents</a><button id="print-incident" class="button button-primary" type="button">${icon('print')} Print incident file</button></div>
           <article class="container incident-document">
             <header class="document-header">
-              <div class="document-brand"><img src="/assets/firesighter-logo.webp" alt="" /><div><p>FireSighter public record</p><h1>Verified Fire Incident</h1></div></div>
+              <div class="document-brand"><img src="./assets/firesighter-logo.webp" alt="" /><div><p>FireSighter public record</p><h1>Verified Fire Incident</h1></div></div>
               <div class="document-status">${icon('shield')}<strong>VERIFIED</strong><span>${escapeHtml(formatDate(incident.verifiedAt, { short: true }))} PHT</span></div>
             </header>
             <div class="document-rule"></div>
@@ -1125,7 +1137,7 @@
             <section class="document-section"><h2>Incident location</h2><div class="document-location"><span>${icon('pin')}</span><div><strong>${escapeHtml(incident.address)}</strong><p>${escapeHtml(incident.city || 'Unknown city')} · Latitude ${Number(incident.lat).toFixed(6)} · Longitude ${Number(incident.lng).toFixed(6)}</p><p>${escapeHtml(incident.locationDescription || 'No additional location description.')}</p><a href="${mapsUrl(incident)}" target="_blank" rel="noopener">Open exact point in Google Maps ↗</a></div></div></section>
             <section class="document-section"><h2>Report information</h2><dl class="document-details"><div><dt>Reported by</dt><dd>${escapeHtml(incident.firstName)} ${escapeHtml(incident.lastName)}</dd></div><div><dt>Photo captured</dt><dd>${escapeHtml(formatDate(incident.capturedAt))} PHT</dd></div><div><dt>Report received</dt><dd>${escapeHtml(formatDate(incident.submittedAt))} PHT</dd></div><div><dt>Admin verified</dt><dd>${escapeHtml(formatDate(incident.verifiedAt))} PHT</dd></div></dl></section>
             <section class="document-section document-timeline"><h2>Verification trail</h2><ol><li class="complete"><span></span><div><strong>Live evidence captured</strong><small>${escapeHtml(formatDate(incident.capturedAt))}</small></div></li><li class="complete"><span></span><div><strong>Community report submitted</strong><small>${escapeHtml(formatDate(incident.submittedAt))}</small></div></li><li class="complete"><span></span><div><strong>Evidence reviewed and classified</strong><small>${escapeHtml(formatDate(incident.verifiedAt))}</small></div></li></ol></section>
-            <footer class="document-footer"><div>${icon('shield')}<span><strong>Integrity note</strong>This document reflects the current FireSighter verification record.</span></div><span>Generated ${escapeHtml(formatDate(new Date().toISOString()))} PHT</span></footer>
+            <footer class="document-footer"><div>${icon('shield')}<span><strong>Record note</strong>This document reflects the FireSighter data saved on this device.</span></div><span>Generated ${escapeHtml(formatDate(new Date().toISOString()))} PHT</span></footer>
           </article>
         </section>`;
       pageRoot.innerHTML = adminMode ? adminShell('incidents', documentMarkup) : documentMarkup;
@@ -1169,7 +1181,7 @@
       const maxType = Math.max(1, ...data.byType.map((item) => Number(item.count) || 0));
       const maxCity = Math.max(1, ...data.byCity.map((item) => Number(item.reports) || 0));
       const content = `
-        <header class="page-header split-header"><div><p class="eyebrow">Community intelligence</p><h1>Fire analytics</h1><p>Live statistics derived from submitted reports and administrator-verified incidents.</p></div><span class="live-data-badge"><i></i> Live report data</span></header>
+        <header class="page-header split-header"><div><p class="eyebrow">Community intelligence</p><h1>Fire analytics</h1><p>Statistics derived from reports and administrator-verified incidents saved on this device.</p></div><span class="live-data-badge"><i></i> Device-local demo data</span></header>
         <div class="analytics-stats">
           ${statCard('All reports', data.totals.reports, 'Since tracking began', 'file')}
           ${statCard('Awaiting review', data.totals.pending, 'Pending admin verification', 'clock')}
